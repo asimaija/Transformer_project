@@ -10,7 +10,7 @@ def get_unique_characters(text):
     return chars
 unique_characters = get_unique_characters(text)
 print(unique_characters)
-print(len(unique_characters))
+
 
 
 def create_mapping(unique_chracters):
