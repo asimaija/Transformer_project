@@ -1,68 +1,55 @@
 import requests
+import torch
+
 url = "https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt"
-text=requests.get(url).text
-print(len(text))
+text = requests.get(url).text
 
+# Unique characters
+unique_characters = sorted(list(set(text)))
 
+# Character mappings
+stoi = {ch: i for i, ch in enumerate(unique_characters)}
+itos = {i: ch for i, ch in enumerate(unique_characters)}
 
-def get_unique_characters(text):
-    chars =  sorted(list(set(text)))
-    return chars
-unique_characters = get_unique_characters(text)
-print(unique_characters)
-
-
-
-def create_mapping(unique_chracters):
-    stoi = {ch:i for i,ch in enumerate(unique_chracters)}
-    itos = {i:ch for i,ch in enumerate(unique_chracters)}
-    return stoi,itos
-stoi,itos = create_mapping(unique_characters)
-
-print("\n character -> integer")
-for ch,i in stoi.items():
-    print(f"{ch}->{i}")
-print("\n Integer -> character")
-for i,ch in itos.items():
-    print(f"{i}->{ch}")
-
-
-
-
+# Encode
 def encode(text):
-    return[stoi[ch] for ch in text]
+    return [stoi[ch] for ch in text]
+
+# Decode
+def decode(indices):
+    return "".join([itos[i] for i in indices])
+
+# Encode complete dataset
 encoded_text = encode(text)
-print(encoded_text[:10])
 
+# Split dataset
+def split_data(encoded_text, train_ratio=0.9):
+    split = int(len(encoded_text) * train_ratio)
+    train_data = encoded_text[:split]
+    val_data = encoded_text[split:]
+    return train_data, val_data
 
-def split_data(encoded_text,train_ratio=0.9):
-    split_text = int(len(encoded_text)*train_ratio)
-    train_data = encoded_text[:split_text]
-    val_data = encoded_text[split_text:]
-    return train_data,val_data
-train_data,val_data = split_data(encoded_text)
-print("Total data",len(encoded_text))
-print("Training data" ,len(train_data))
-print("Validate data" , len(val_data))
+train_data, val_data = split_data(encoded_text)
 
-def create_batch(data,block_size):
-    x=data[:block_size]
-    y=data[1:block_size+1]
-    return x,y
-block_size = 4
-x,y = create_batch(train_data,block_size)
-print("input" ,x)
-print("output" ,y)
+# Random batch
+def get_batch(data, block_size, batch_size):
 
+    max_index = len(data) - block_size - 1
 
+    indices = torch.randint(
+        0,
+        max_index,
+        (batch_size,)
+    )
 
+    x = torch.stack([
+        torch.tensor(data[i:i + block_size], dtype=torch.long)
+        for i in indices
+    ])
 
+    y = torch.stack([
+        torch.tensor(data[i + 1:i + block_size + 1], dtype=torch.long)
+        for i in indices
+    ])
 
-
-
-
-    
-
-
-
-
+    return x, y
