@@ -5,9 +5,6 @@ import torch.optim as optim
 from data.dataset import train_data, get_batch
 from model.transfomer import Transformer
 
-# -------------------------
-# Hyperparameters
-# -------------------------
 vocab_size = 65
 embedding_dim = 256
 num_heads = 8
@@ -20,9 +17,6 @@ batch_size = 16
 epochs = 10000
 learning_rate = 3e-4
 
-# -------------------------
-# Model
-# -------------------------
 model = Transformer(
     vocab_size=vocab_size,
     embedding_dim=embedding_dim,
@@ -34,9 +28,7 @@ model = Transformer(
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-# -------------------------
-# Training
-# -------------------------
+
 for epoch in range(epochs):
 
     x, y = get_batch(
@@ -61,9 +53,7 @@ for epoch in range(epochs):
     if epoch % 100 == 0:
         print(f"Epoch {epoch} | Loss = {loss.item():.4f}")
 
-# -------------------------
-# Save Model
-# -------------------------
+
 torch.save(model.state_dict(), "transformer.pth")
 
 print("\nTraining Completed!")

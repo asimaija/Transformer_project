@@ -3,9 +3,6 @@ import torch
 from model.transfomer import Transformer
 from data.dataset import encode, decode
 
-# ------------------------------------
-# Hyperparameters
-# ------------------------------------
 vocab_size = 65
 embedding_dim = 256
 num_heads = 8
@@ -21,9 +18,6 @@ learning_rate = 3e-4
 temperature = 0.8
 max_new_tokens = 1
 
-# ------------------------------------
-# Load Model
-# ------------------------------------
 model = Transformer(
     vocab_size=vocab_size,
     embedding_dim=embedding_dim,
@@ -35,9 +29,6 @@ model = Transformer(
 model.load_state_dict(torch.load("transformer.pth"))
 model.eval()
 
-# ------------------------------------
-# User Input
-# ------------------------------------
 prompt = input("Enter starting text: ")
 
 if len(prompt) == 0:
@@ -48,9 +39,6 @@ context = torch.tensor(
     dtype=torch.long
 )
 
-# ------------------------------------
-# Text Generation
-# ------------------------------------
 with torch.no_grad():
 
     for _ in range(max_new_tokens):
@@ -83,10 +71,6 @@ with torch.no_grad():
         )
 
 
-#generate text
-# ------------------------------------
-# Decode and Print
-# ------------------------------------
 generated_text = decode(context[0].tolist())
 
 # Next predicted character
@@ -116,8 +100,7 @@ while len(current_text) == len(prompt) or current_text[-1] not in [" ", "\n", ".
 
 predicted_word = current_text.split()[0]
 
-print("\n" + "="*50)
+
 print("Input               :", prompt)
 print("Predicted Character :", predicted_character)
 print("Predicted Word      :", predicted_word)
-print("="*50)
