@@ -22,7 +22,7 @@ def decode(indices):
 # Encode complete dataset
 encoded_text = encode(text)
 
-# Split dataset
+
 def split_data(encoded_text, train_ratio=0.9):
     split = int(len(encoded_text) * train_ratio)
     train_data = encoded_text[:split]
