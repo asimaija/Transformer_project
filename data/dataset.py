@@ -7,6 +7,7 @@ text = requests.get(url).text
 # Unique characters
 unique_characters = sorted(list(set(text)))
 
+
 # Character mappings
 stoi = {ch: i for i, ch in enumerate(unique_characters)}
 itos = {i: ch for i, ch in enumerate(unique_characters)}
@@ -21,6 +22,7 @@ def decode(indices):
 
 # Encode complete dataset
 encoded_text = encode(text)
+
 
 
 def split_data(encoded_text, train_ratio=0.9):

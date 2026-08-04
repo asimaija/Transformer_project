@@ -24,7 +24,7 @@ context = torch.tensor([encode(prompt)], dtype=torch.long)
 # Predict 2 characters
 with torch.no_grad():
 
-    for i in range(2):          # Predict 2 times
+    for i in range(1):         
 
         # Model prediction
         logits = model(context)
